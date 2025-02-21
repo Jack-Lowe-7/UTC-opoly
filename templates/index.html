@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monopoly Game</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+
+        // Join the game
+        function joinGame() {
+            const playerName = prompt("Enter your name:");
+            socket.emit('join_game', {name: playerName});
+        }
+
+        // Roll dice
+        function rollDice() {
+            const playerName = prompt("Enter your name to roll the dice:");
+            socket.emit('roll_dice', {name: playerName});
+        }
+
+        // Buy Property
+        function buyProperty(propertyName) {
+            const playerName = prompt("Enter your name to buy this property:");
+            socket.emit('buy_property', {name: playerName, property_name: propertyName});
+        }
+
+        // Listen for game updates
+        socket.on('game_update', function(data) {
+            document.getElementById("game_updates").innerText = data.message;
+        });
+
+    </script>
+</head>
+<body>
+    <h1>Monopoly Game</h1>
+    <button onclick="joinGame()">Join Game</button>
+    <button onclick="rollDice()">Roll Dice</button>
+    <div id="game_updates"></div>
+
+    <h2>Board</h2>
+    <ul>
+        <li><button onclick="buyProperty('Mediterranean Avenue')">Mediterranean Avenue</button></li>
+        <li><button onclick="buyProperty('Baltic Avenue')">Baltic Avenue</button></li>
+        <!-- Add more properties here -->
+    </ul>
+</body>
+</html>
